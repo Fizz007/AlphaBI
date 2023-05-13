@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import Pagination from "./Pagination";
-import ClimbingBoxLoader from "react-spinners/PacmanLoader";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import { auth, provider } from "../components/FireBaseauth";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 
 const Navbar = () => {
+  const [user] = useAuthState(auth);
   const [profile, setProfile] = useState(false);
   const [quiery, setQuiery] = useState("");
   const [run, setRun] = useState(false)
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [val, setVal] = useState([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(12);
   const [count, setCount] = useState(0);
   const [fav, setFav] = useState([])
  
-  console.log(fav)
+  console.log(val)
 
   const fetchData = () => {
     fetch(
@@ -23,20 +27,20 @@ const Navbar = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        setTimeout(()=>{
-          setIsLoading(true);
+      
           setVal(data.data);
           setCount(data.pagination.total_count);
 
-        },3000)
+    
       })
 
       .catch((err) => console.log("error", err));
+      
   };
 
   useEffect(() => {
     
-    setIsLoading(true);
+    
     fetchData();
   }, [ skip, limit, run]);
 
@@ -44,21 +48,18 @@ const Navbar = () => {
     setRun(true)
   }
 
-  if (!isLoading) {
-    return (
-      <ClimbingBoxLoader
-        color="rgb(244, 51, 151)"
-        cssOverride={{
-          left: "42%",
-          position: "absolute",
-          textAlign: "center",
-          top: "42%",
-        }}
-        size={45}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />
-    );
+    function handleLogIn(){
+    if (!user) {
+      const signInWithGoogle = async () => {
+        await signInWithPopup(auth, provider);
+      };
+      signInWithGoogle();
+    } else {
+      const signUserOut = async () => {
+        await signOut(auth);
+      };
+      signUserOut();
+    }
   }
 
   return (
@@ -83,23 +84,15 @@ const Navbar = () => {
         <button className="bttn" onClick={handle}>Search</button>
 
         <div className="profile">
-          <button onClick={()=>setProfile(!profile)} className="bttn">Profile</button>
+          <button onClick={()=>setProfile(!profile)} className="bttn">{user ? user.displayName: "UserProfile"}</button>
 
           {profile && (
             <div style={{ display: "block" }}>
               <div className="profileHoverBtnContainer">
-                <h3>
-                  {/* Hello {localData === null ? "User" : localData.name} */}
-                  hello
-                </h3>
-                <h5>
-                  {/* {localData !== null
-                        ? "Welcome to Meesho"
-                        : "Access your account"} */}
-                </h5>
-                <button className="login_btn">
+               
+                <button className="login_btn" onClick={handleLogIn}>
                   {/* Sign {localData !== null ? "out" : "up"} */}
-                  User
+                 {user ? "LogOut" : "LogIn"}
                 </button>
               </div>
             </div>

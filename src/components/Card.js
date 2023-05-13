@@ -27,22 +27,22 @@ const Card = ({ item, setFav, fav }) => {
               />
             </a>
           </div>
-          <div className="ticket-container">
-            <div className="ticket__content">
-              {/* <h4 className="ticket__movie-title">Blade Runner 2049</h4> */}
-              <p className="ticket__movie-slogan">{item.title}</p>
-              {star ? (
-                <span onClick={() => addToFavourite(false)}>
-                 ADDED <AiFillStar size={25} />
-                </span>
-              ) : (
-                <span onClick={() => addToFavourite(true)}>
-                 ADD <AiOutlineStar size={25} />
-                </span>
-              )}
-              {/* <p className="ticket__current-price">$28.00</p>
-					<p className="ticket__old-price">$44.99</p>
-					<button className="ticket__buy-btn">Buy now</button> */}
+          <div className="giphy-container">
+            <div className="giphy_content">
+              <h6 className="giphy_title">{item.title}</h6>
+              <p className="giphy_slogan">@{item.username}</p>
+              <div className="add_btn">
+                {star ? (
+                  <span onClick={() => addToFavourite(false)} className="fav_btn">
+                   ADDED <AiFillStar size={25} />
+                  </span>
+                ) : (
+                  <span onClick={() => addToFavourite(true)} className="fav_btn">
+                   ADD <AiOutlineStar size={25} />
+                  </span>
+                )}
+              </div>
+             
             </div>
           </div>
         </div>
