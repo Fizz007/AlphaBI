@@ -6,6 +6,7 @@ import { auth, provider } from "../components/FireBaseauth";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { HiUserCircle } from "react-icons/hi2";
+import Loader from "./Loader";
 
 const Navbar = () => {
   const [user] = useAuthState(auth);
@@ -107,7 +108,7 @@ const Navbar = () => {
             {user ? "LogOut" : "LogIn"}
           </button>
           <span className="user">
-            {" "}
+          
             {user ? "Welcome " + user.displayName : null}
           </span>
           <span>
@@ -124,14 +125,14 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-      {val.length > 0 && (
+      {quiery !== "" ? 
         <div className="card_wrapper">
           {val.length > 0 &&
             val.map((item, i) => {
               return <Card item={item} key={i} fav={fav} setFav={setFav} />;
             })}
         </div>
-      )}
+      : <Loader/>}
 
       <div className="paginationApp">
         {val.length > 0 && <Pagination count={count} setSkip={setSkip} />}
