@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import Pagination from "./Pagination";
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+// import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { auth, provider } from "../components/FireBaseauth";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { FaUserCircle } from "react-icons/fa";
+import { HiUserCircle } from "react-icons/hi2";
 
 const Navbar = () => {
   const [user] = useAuthState(auth);
@@ -90,7 +90,7 @@ const Navbar = () => {
                 height="50px"
               />
             ) : (
-              <FaUserCircle color="white" size={50} />
+              <HiUserCircle color="white" size={50} />
             )}
           </span>
         </div>
