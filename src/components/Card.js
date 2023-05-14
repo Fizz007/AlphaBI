@@ -30,7 +30,7 @@ const Card = ({ item, setFav, fav }) => {
           <div className="giphy-container">
             <div className="giphy_content">
               <h6 className="giphy_title">{item.title}</h6>
-              <p className="giphy_slogan">@{item.username}</p>
+              <p className="giphy_slogan">@{item.username.toLowerCase()}</p>
               <div className="add_btn">
                 {star ? (
                   <span onClick={() => addToFavourite(false)} className="fav_btn">

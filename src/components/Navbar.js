@@ -7,20 +7,19 @@ import { signInWithPopup, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaUserCircle } from "react-icons/fa";
 
-
 const Navbar = () => {
   const [user] = useAuthState(auth);
   const [profile, setProfile] = useState(false);
   const [quiery, setQuiery] = useState("");
-  const [run, setRun] = useState(false)
+  const [run, setRun] = useState(false);
   // const [isLoading, setIsLoading] = useState(false);
   const [val, setVal] = useState([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(12);
   const [count, setCount] = useState(0);
-  const [fav, setFav] = useState([])
- 
-  console.log(val)
+  const [fav, setFav] = useState([]);
+
+  // console.log(val)
 
   const fetchData = () => {
     fetch(
@@ -28,28 +27,23 @@ const Navbar = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-      
-          setVal(data.data);
-          setCount(data.pagination.total_count);
-
-    
+        setVal(data.data);
+        setCount(data.pagination.total_count);
       })
 
       .catch((err) => console.log("error", err));
-      
   };
 
   useEffect(() => {
-    
-    
     fetchData();
-  }, [ skip, limit, run]);
+  }, [skip, limit, run]);
 
   function handle() {
-    setRun(true)
+    setRun(true);
   }
 
-    function handleLogIn(){
+  function handleLogIn() {
+   
     if (!user) {
       const signInWithGoogle = async () => {
         await signInWithPopup(auth, provider);
@@ -72,30 +66,43 @@ const Navbar = () => {
             placeholder="Search your favourite GIPH"
             className="searchbar"
             value={quiery}
-            onChange={ 
-             (e)=> {
-              setRun(false)
-              setQuiery(e.target.value)
-             }
-              
-            }
-            
+            onChange={(e) => {
+              setRun(false);
+              setQuiery(e.target.value);
+            }}
           />
         </div>
-        <button className="bttn" onClick={handle}>Search</button>
+        <button className="bttn" onClick={handle}>
+          Search
+        </button>
 
         <div className="profile">
-          <button onClick={handleLogIn} className="bttn">{user ? "LogOut": "LogIn"}</button>
-          <span>{user ? <img src={user.photoURL} alt="user image" width='50px' height="50px" />: <FaUserCircle color="white" size={50}/>}</span>
-
+          <button onClick={handleLogIn} className="bttn">
+            {user ? "LogOut" : "LogIn"}
+          </button>
+          <span className="user">{user ? user.displayName : null}</span>
+          <span>
+            {user ? (
+              <img
+                src={user.photoURL}
+                alt="user image"
+                width="50px"
+                height="50px"
+              />
+            ) : (
+              <FaUserCircle color="white" size={50} />
+            )}
+          </span>
         </div>
       </div>
-     { val.length > 0 && <div className="card_wrapper">
-        {val.length > 0 &&
-          val.map((item, i) => {
-            return <Card item={item} key={i} fav={fav} setFav={setFav}/>;
-          })}
-      </div>}
+      {val.length > 0 && (
+        <div className="card_wrapper">
+          {val.length > 0 &&
+            val.map((item, i) => {
+              return <Card item={item} key={i} fav={fav} setFav={setFav} />;
+            })}
+        </div>
+      )}
 
       <div className="paginationApp">
         {val.length > 0 && <Pagination count={count} setSkip={setSkip} />}
