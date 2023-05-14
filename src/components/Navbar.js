@@ -5,6 +5,7 @@ import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { auth, provider } from "../components/FireBaseauth";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { FaUserCircle } from "react-icons/fa";
 
 
 const Navbar = () => {
@@ -84,19 +85,9 @@ const Navbar = () => {
         <button className="bttn" onClick={handle}>Search</button>
 
         <div className="profile">
-          <button onClick={()=>setProfile(!profile)} className="bttn">{user ? user.displayName: "UserProfile"}</button>
+          <button onClick={handleLogIn} className="bttn">{user ? "LogOut": "LogIn"}</button>
+          <span>{user ? <img src={user.photoURL} alt="user image" width='50px' height="50px" />: <FaUserCircle color="white" size={50}/>}</span>
 
-          {profile && (
-            <div style={{ display: "block" }}>
-              <div className="profileHoverBtnContainer">
-               
-                <button className="login_btn" onClick={handleLogIn}>
-                  {/* Sign {localData !== null ? "out" : "up"} */}
-                 {user ? "LogOut" : "LogIn"}
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
      { val.length > 0 && <div className="card_wrapper">

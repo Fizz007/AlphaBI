@@ -12,6 +12,7 @@
 .hero-container {
   display: flex;
   justify-content: space-between;
+ 
   flex-wrap: wrap;
   height: 100%;
   width: auto;
@@ -186,15 +187,16 @@
 .header {
   display: flex;
   justify-content: center;
+  gap: 8px;
   align-items: center;
-  height: 60px;
+  height: 70px;
   width: 100%;
   background-color: black;
 }
 
 .search {
-  width: 25%;
-
+  width: 35%;
+ 
   border: none;
   outline: none;
 }
@@ -205,23 +207,32 @@
 
 .searchbar {
   padding: 2px 12px;
-  width: 90%;
-  border-radius: 5px;
+  width: 100%;
+  height: 38px;
+  border-radius: 8px 0 0 8px;
 }
 
 .bttn {
-  padding: 0 20px;
+  padding: 7px 20px;
   font-size: 20px;
-  border-radius: 5px;
+  border-radius: 6px;
   background-color: white;
 }
+.profile{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.profile > span{
+	margin-left: 10px;
+}
 
-.profile {
-  margin-left: 15rem;
+.profile > span > img{
+	border-radius: 50%;
 }
 
 .profile .bttn {
-  padding: 2px 20px;
+  padding: 7px 20px;
   outline: none;
   border: none;
   border-radius: 5px;
@@ -230,13 +241,13 @@
 
 .profileHoverBtnContainer {
   position: absolute;
-  right: 295px;
+  right: 340px;
   bottom: 0;
-  top: 60px;
+  top: 70px;
   width: 180px;
   height: 85px;
   padding: 10px;
-  margin-left: -30px;
+  /* margin-left: -30px; */
   background: white;
 
   z-index: 9999;
