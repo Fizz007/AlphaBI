@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import Pagination from "./Pagination";
-// import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { auth, provider } from "../components/FireBaseauth";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -9,41 +9,36 @@ import { HiUserCircle } from "react-icons/hi2";
 
 const Navbar = () => {
   const [user] = useAuthState(auth);
-  const [profile, setProfile] = useState(false);
   const [quiery, setQuiery] = useState("");
   const [run, setRun] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [val, setVal] = useState([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(12);
   const [count, setCount] = useState(0);
   const [fav, setFav] = useState([]);
 
-  // console.log(val)
-
-  const fetchData = () => {
+  function fetchData() {
     fetch(
       `https://api.giphy.com/v1/gifs/search?api_key=GlVGYHkr3WSBnllca54iNt0yFbjz7L65&q=${quiery}&limit=${limit}&offset=${skip}&rating=g&lang=en`
     )
       .then((response) => response.json())
       .then((data) => {
-        setVal(data.data);
-        setCount(data.pagination.total_count);
+        setTimeout(() => {
+          setVal(data.data);
+          setCount(data.pagination.total_count);
+          setIsLoading(true);
+        }, 1000);
       })
 
       .catch((err) => console.log("error", err));
-  };
+  }
 
   useEffect(() => {
     fetchData();
   }, [skip, limit, run]);
 
-  function handle() {
-    setRun(true);
-  }
-
   function handleLogIn() {
-   
     if (!user) {
       const signInWithGoogle = async () => {
         await signInWithPopup(auth, provider);
@@ -55,6 +50,30 @@ const Navbar = () => {
       };
       signUserOut();
     }
+  }
+
+  function handleByEnter(e) {
+    if (e.key === "Enter") {
+      setRun(true);
+      setIsLoading(false)
+    }
+  }
+
+  if (!isLoading) {
+    return (
+      <ClimbingBoxLoader
+        color="black"
+        cssOverride={{
+          left: "42%",
+          position: "absolute",
+          textAlign: "center",
+          top: "42%",
+        }}
+        size={25}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
+    );
   }
 
   return (
@@ -70,9 +89,16 @@ const Navbar = () => {
               setRun(false);
               setQuiery(e.target.value);
             }}
+            onKeyDown={handleByEnter}
           />
         </div>
-        <button className="bttn" onClick={handle}>
+        <button
+          className="bttn"
+          onClick={() => {
+            setIsLoading(false)
+            setRun(true);
+          }}
+        >
           Search
         </button>
 
@@ -80,7 +106,10 @@ const Navbar = () => {
           <button onClick={handleLogIn} className="bttn">
             {user ? "LogOut" : "LogIn"}
           </button>
-          <span className="user">{user ? user.displayName : null}</span>
+          <span className="user">
+            {" "}
+            {user ? "Welcome " + user.displayName : null}
+          </span>
           <span>
             {user ? (
               <img
